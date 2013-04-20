@@ -12,8 +12,8 @@ window.requestAnimFrame = (function () {
     startTime = Date.now();
     time = 0;
     container = document.getElementById('container');
-
-    if (!!ctx) {
+    
+    if (!ctx) {
         container.innerHTML = "With your current configuration the demo is unable to run.  Check to make sure your browser supports WebGL.";
         return;
     }
