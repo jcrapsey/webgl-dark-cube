@@ -61,12 +61,4 @@ window.requestAnimFrame = (function () {
     render();
     window.requestAnimFrame(loop);
   }());
-}());   cube.transform.addRotation(0.001, 0.005, 0.0025);
-        cube.draw();
-    }
-
-    (function loop() {
-        render();
-        window.requestAnimFrame(loop);
-    }());
 }());
