@@ -1,75 +1,75 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>WebGL Experiment (Dark Cube)</title>
+  <head>
+    <title>WebGL Experiment (Dark Cube)</title>
 
-		<style>
-			* {margin:0;padding:0;}
-			* {background:rgba(0,0,0,0);}
-		</style>
+    <style>
+      * {margin:0;padding:0;}
+      * {background:rgba(0,0,0,0);}
+    </style>
 
-		<script id="shader-vs" type="x-shader/x-vertex">
-			uniform mat4 transform;
-			uniform mat4 cameraInverse;
-			uniform mat4 cameraProjection;
+    <script id="shader-vs" type="x-shader/x-vertex">
+      uniform mat4 transform;
+      uniform mat4 cameraInverse;
+      uniform mat4 cameraProjection;
 
-			attribute vec3 vertices;
-			attribute vec3 normals;
-			attribute vec2 uvs;
+      attribute vec3 vertices;
+      attribute vec3 normals;
+      attribute vec2 uvs;
 
-			varying vec2 uv;
-			varying float light;
+      varying vec2 uv;
+      varying float light;
 
-			void main(void){
-				uv = uvs;
-				light = dot( normalize( mat3( transform[0].xyz, transform[1].xyz, transform[2].xyz ) * normals ), vec3( 0.0, 0.0, 2.0 ));
-				gl_Position = cameraProjection * cameraInverse * transform * vec4( vertices, 1.0 );
-			}
-		</script>
+      void main(void){
+        uv = uvs;
+        light = dot( normalize( mat3( transform[0].xyz, transform[1].xyz, transform[2].xyz ) * normals ), vec3( 0.0, 0.0, 2.0 ));
+        gl_Position = cameraProjection * cameraInverse * transform * vec4( vertices, 1.0 );
+      }
+    </script>
 
 
-		<script id="shader-fs" type="x-shader/x-fragment">
-			#ifdef GL_ES
-			precision highp float;
-			#endif
+    <script id="shader-fs" type="x-shader/x-fragment">
+      #ifdef GL_ES
+      precision highp float;
+      #endif
 
-			uniform float startTime;
-			uniform float time;
-			uniform vec2 resolution;
+      uniform float startTime;
+      uniform float time;
+      uniform vec2 resolution;
 
-			varying float light;
+      varying float light;
 
-			float pedals = 4.0; // pedal count
+      float pedals = 4.0; // pedal count
 
-			void main( void ) {  
-				vec2 uPos = ( gl_FragCoord.xy / resolution.y );
-				uPos -= vec2((resolution.x/resolution.y)*0.5, 0.5);// shift origin to center
+      void main( void ) {  
+        vec2 uPos = ( gl_FragCoord.xy / resolution.y );
+        uPos -= vec2((resolution.x/resolution.y)*0.5, 0.5);// shift origin to center
 
-				float angle = atan(uPos.y, uPos.x);
-				float len = sqrt(uPos.x*uPos.x + uPos.y*uPos.y);
+        float angle = atan(uPos.y, uPos.x);
+        float len = sqrt(uPos.x*uPos.x + uPos.y*uPos.y);
 
-				// Color Band Curves
-				//float newAngle = angle - 1.0*sin(len*10.0-time*2.0) - 0.5*sin(len*1.0-time*0.0001);
-				float newAngle = angle - 0.25*sin(len*6.0-time*0.5) - 0.5*sin(len*1.0-time*0.01);
+        // Color Band Curves
+        //float newAngle = angle - 1.0*sin(len*10.0-time*2.0) - 0.5*sin(len*1.0-time*0.0001);
+        float newAngle = angle - 0.25*sin(len*6.0-time*0.5) - 0.5*sin(len*1.0-time*0.01);
 
-				// Color Band Spread
-				float flower = 1.0 - smoothstep(1.0,1.5,len);
-				flower *= 3.0 * (sin(newAngle*pedals )+0.05); 
-				vec3 flowerColor = vec3(flower*0.8, flower*0.4, flower*0.4);
+        // Color Band Spread
+        float flower = 1.0 - smoothstep(1.0,1.5,len);
+        flower *= 3.0 * (sin(newAngle*pedals )+0.05); 
+        vec3 flowerColor = vec3(flower*0.8, flower*0.4, flower*0.4);
 
-				// Color Band Gradient
-				float gradient = smoothstep(len*0.1, len*0.8, len*1.5);
-				vec3 gradientColor = vec3(gradient*0.0, gradient*0.0, gradient*0.8);
+        // Color Band Gradient
+        float gradient = smoothstep(len*0.1, len*0.8, len*1.5);
+        vec3 gradientColor = vec3(gradient*0.0, gradient*0.0, gradient*0.8);
 
-				vec3 color = flowerColor + gradientColor;
-				gl_FragColor = vec4(color, 1.0)*light;
-			}
-		</script>
-	</head>
-	<body>
-		<div id="container"></div>
-		<a href="http://github.com/jcrapsey/webgl-dark-cube"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub"></a>
-		<script type="text/javascript" src="GLOW.js"></script>
-		<script type="text/javascript" src="main.js"></script>
-	</body>
+        vec3 color = flowerColor + gradientColor;
+        gl_FragColor = vec4(color, 1.0)*light;
+      }
+    </script>
+  </head>
+  <body>
+    <div id="container"></div>
+    <a href="http://github.com/jcrapsey/webgl-dark-cube"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub"></a>
+    <script type="text/javascript" src="GLOW.js"></script>
+    <script type="text/javascript" src="main.js"></script>
+  </body>
 </html>
